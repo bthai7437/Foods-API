@@ -34,13 +34,14 @@ const upload  = multer({storage: storage,
 
 router.get('/foods',(req,res,next)=>{
     Food.find()
-    .select('title ingredients qty foodImage')
+    .select('title type ingredients qty foodImage')
     .exec()
     .then(docs => {
         const response = {
             foods: docs.map(doc =>{
                 return {
                     title: doc.title,
+                    type: doc.type,
                     ingredients: doc.ingredients,
                     _id : doc._id,
                     qty: doc.qty,
@@ -69,6 +70,7 @@ router.post('/foods',upload.single('foodImage'),(req,res,next)=>{
     const food = new Food({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
+        type: req.body.type,
         ingredients: req.body.ingredients,
         qty: req.body.qty,
         foodImage: req.file.path
@@ -81,6 +83,7 @@ router.post('/foods',upload.single('foodImage'),(req,res,next)=>{
             createdProduct: {
                 title: result.title,
                 ingredients: result.ingredients,
+                type: result.type,
                 qty: result.qty,
                 foodImage: result.foodImage,
                 request:{

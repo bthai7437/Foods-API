@@ -30,7 +30,7 @@ app.use('/food-recipes',foodRoutes);
 
 
 mongoose.connect(
-'mongodb+srv://tempUser:tekken7@cluster0-agkt2.mongodb.net/food-recipes?retryWrites=true&w=majority',
+'mongodb+srv://bthai7437:Forgetit@cluster0-agkt2.mongodb.net/food-recipes?retryWrites=true&w=majority',
 { useNewUrlParser: true }
 );
 
