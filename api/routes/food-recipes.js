@@ -1,3 +1,4 @@
+// TODO: Describe purpose of each requirement
 const express = require('express');
 const router = express.Router();
 const Food = require('../models/food');
@@ -22,7 +23,7 @@ const fileFilter = (req,file,cb) => {
     }
 };    
 
-const upload  = multer({storage: storage,
+const upload = multer({storage: storage,
     limits:{
     fileSize: 1024 * 1024 * 5 //5 megabytes upload limit  
     },
