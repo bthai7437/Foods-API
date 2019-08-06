@@ -29,9 +29,7 @@ const upload  = multer({storage: storage,
     fileFilter:fileFilter
 });
 
-
-
-
+// Get all food entries from database
 router.get('/foods',(req,res,next)=>{
     Food.find()
     .select('title type ingredients qty foodImage')
@@ -63,6 +61,7 @@ router.get('/foods',(req,res,next)=>{
     });
 });
 
+// Post a new entry food to the database
 router.post('/foods',upload.single('foodImage'),(req,res,next)=>{
 
     console.log(req.file);
@@ -102,6 +101,7 @@ router.post('/foods',upload.single('foodImage'),(req,res,next)=>{
     
 });
 
+// Get a food entry by ID
 router.get('/foods/:foodID',(req,res,next)=>{
     const id = req.params.foodID;
     Food.findById(id)
@@ -119,6 +119,40 @@ router.get('/foods/:foodID',(req,res,next)=>{
     
 })
 
+// Get a food entry by meal type (breakfast, lunch, etc.)
+router.get('/foods/byType/:foodType',(req,res,next)=>{
+    const type = req.params.foodType;
+    Food.find({ type: type})
+    .select('title type ingredients qty foodImage')
+    .exec()
+    .then(docs => {
+        const response = {
+            foods: docs.map(doc =>{
+                return {
+                    title: doc.title,
+                    type: doc.type,
+                    ingredients: doc.ingredients,
+                    _id : doc._id,
+                    qty: doc.qty,
+                    foodImage: doc.foodImage,
+                    request:{
+                        type: 'GET',
+                        url: 'http://localhost:3000/food-recipes/'+ doc._id
+                    }
+                }
+            })
+        };
+        res.status(200).json(response);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
+// TODO: Write what this does
 router.patch('/foods/:foodID',(req,res,next)=>{
     const id = req.params.foodID;
     const updateOps = {};
@@ -142,6 +176,7 @@ router.patch('/foods/:foodID',(req,res,next)=>{
     });    
 })
 
+// Delete a food entry by ID
 router.delete('/foods/:foodID',(req,res,next)=>{
     const id = req.params.foodID;
 
